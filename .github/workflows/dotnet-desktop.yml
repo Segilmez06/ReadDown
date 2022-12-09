@@ -1,13 +1,3 @@
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-# This workflow will build, test, sign and package a WPF or Windows Forms desktop application
-# built on .NET Core.
-# To learn how to migrate your existing application to .NET Core,
-# refer to https://docs.microsoft.com/en-us/dotnet/desktop-wpf/migration/convert-project-from-net-framework
-#
 
 name: .NET Desktop
 
@@ -22,12 +12,6 @@ jobs:
   build:
   
     runs-on: windows-latest
-    
-    env:
-      Project_Path: ReadDown/ReadDown/ReadDown.csproj
-      Binary_Directory: ReadDown/ReadDown/bin/Debug/net7.0-windows10.0.19041.0/win-x64
-      Architecture: x64
-      Configuration: Debug
 
     steps:
     - name: Checkout
@@ -41,18 +25,18 @@ jobs:
       with:
         dotnet-version: 7.0.x
 
-    # Build the projects
-    - name: Build for $env:Configuration $env:Architecture
-      run: dotnet build $env:ReadDown/ReadDown.csproj -c $env:Configuration -a $env:Architecture
+    # Build the project
+    - name: Build
+      run: dotnet build ReadDown/ReadDown/ReadDown.csproj -c Debug -a x64
     
     # Archive the files
     #- name: Zip the files
     #  run: tar.exe -a -c -f win-debug-x64.zip $env:Binary_Directory/*
       
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
+    # Upload output binaries
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: Windows x64 Debug
-        path: $env:Binary_Directory
+        path: ReadDown/ReadDown/bin/Debug/
         
