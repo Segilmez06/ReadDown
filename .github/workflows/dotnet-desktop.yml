@@ -27,7 +27,7 @@ jobs:
 
     # Build the project
     - name: Build
-      run: dotnet build ReadDown/ReadDown/ReadDown.csproj -c Debug -a x64
+      run: dotnet build ReadDown/ReadDown.csproj -c Debug -a x64
     
     # Archive the files
     #- name: Zip the files
@@ -38,5 +38,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Windows x64 Debug
-        path: ReadDown/ReadDown/bin/Debug/
+        path: ReadDown/bin/Debug/
         
