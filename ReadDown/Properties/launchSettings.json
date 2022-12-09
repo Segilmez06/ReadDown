@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "Argumented": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\sarpe\\School\\Biyoloji\\Merkezi Sinir Sistemi.md\""
+    },
+    "Clear Startup": {
+      "commandName": "Project"
+    }
+  }
+}
