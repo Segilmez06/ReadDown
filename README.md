@@ -1,6 +1,6 @@
 # ReadDown
 
-[![.NET Core Desktop](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml)
+[![.NET Desktop Debug Build](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml)
 
 ReadDown is a fluent and easy to use Markdown reader.
 
@@ -11,7 +11,8 @@ ReadDown has a few features which is easy to use:
 
 ## Installation
 
-Just get your installer from [releases](https://github.com/Segilmez06/ReadDown/releases) page.
+Not released yet. Either build it yourself or get debug builds from CI.
+<!--Just get your installer from [releases](https://github.com/Segilmez06/ReadDown/releases) page.-->
 
 ## Contributing
 

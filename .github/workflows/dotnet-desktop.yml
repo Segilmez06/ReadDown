@@ -37,8 +37,10 @@ jobs:
         name: Windows x64 Debug Build
         path: ReadDown/bin/Debug/
         
+        
+        
   build-i386:
-    name: Build for Windows x64
+    name: Build for Windows x86
     
     runs-on: windows-latest
 
@@ -56,14 +58,16 @@ jobs:
 
     # Build the project
     - name: Build
-      run: dotnet build ReadDown/ReadDown.csproj -c Debug -a x32
+      run: dotnet build ReadDown/ReadDown.csproj -c Debug -a x86
       
     # Upload output binaries
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: Windows x32 Debug Build
+        name: Windows x86 Debug Build
         path: ReadDown/bin/Debug/
+
+        
         
   build-arm64:
     name: Build for Windows Arm64
