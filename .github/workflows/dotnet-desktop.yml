@@ -9,7 +9,7 @@ on:
 
 jobs:
 
-  build:
+  build-amd64:
     name: Build for Windows x64
     
     runs-on: windows-latest
@@ -30,14 +30,66 @@ jobs:
     - name: Build
       run: dotnet build ReadDown/ReadDown.csproj -c Debug -a x64
     
-    # Archive the files
-    #- name: Zip the files
-    #  run: tar.exe -a -c -f win-debug-x64.zip $env:Binary_Directory/*
+    # Upload output binaries
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Windows x64 Debug Build
+        path: ReadDown/bin/Debug/
+        
+  build-i386:
+    name: Build for Windows x64
+    
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    # Build the project
+    - name: Build
+      run: dotnet build ReadDown/ReadDown.csproj -c Debug -a x32
       
     # Upload output binaries
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: Windows x64 Debug
+        name: Windows x32 Debug Build
+        path: ReadDown/bin/Debug/
+        
+  build-arm64:
+    name: Build for Windows Arm64
+    
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    # Build the project
+    - name: Build
+      run: dotnet build ReadDown/ReadDown.csproj -c Debug -a arm64
+      
+    # Upload output binaries
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Windows Arm64 Debug Build
         path: ReadDown/bin/Debug/
         
