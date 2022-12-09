@@ -16,7 +16,7 @@
     <SignAssembly>False</SignAssembly>
     <Authors>Segilmez06</Authors>
     <Company>Zyex Software</Company>
-    <Description>ReadDown is a fluent and stupidly simple Markdown reader.</Description>
+    <Description>ReadDown is a fluent and easy to use Markdown reader.</Description>
     <Copyright>Sarp Eren EGILMEZ</Copyright>
     <PackageProjectUrl>https://github.com/Segilmez06/ReadDown</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Segilmez06/ReadDown</RepositoryUrl>
@@ -24,7 +24,7 @@
     <PackageTags>Markdown;Reader;Fluent</PackageTags>
     <NeutralLanguage>en-001</NeutralLanguage>
     <StartupObject>ReadDown.Program</StartupObject>
-    <Title>A simple Markdown reader.</Title>
+    <Title>A simple Markdown reader</Title>
     <PackageIcon>RD_Logo.png</PackageIcon>
     <ApplicationIcon>Resources\RD_Icon.ico</ApplicationIcon>
   </PropertyGroup>

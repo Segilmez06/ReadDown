@@ -1,5 +1,7 @@
 # ReadDown
 
+[![.NET Core Desktop](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml)
+
 ReadDown is a fluent and easy to use Markdown reader.
 
 It converts Markdown to HMTL via [Markdig](https://github.com/xoofx/markdig) and renders it via [Edge WebView2](https://developer.microsoft.com/en-us/microsoft-edge/webview2/).

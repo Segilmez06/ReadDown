@@ -1,0 +1,3 @@
+- [x] Set assembly info
+- [x] Add icon
+- [x] Add context menu icons
