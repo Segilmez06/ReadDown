@@ -6,6 +6,10 @@
     },
     "Clear Startup": {
       "commandName": "Project"
+    },
+    "Cheatsheet": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Users\\sarpe\\Desktop\\markdown-here.wiki\\Markdown-Cheatsheet.md\""
     }
   }
 }

@@ -144,6 +144,7 @@ namespace ReadDown.Properties {
         ///
         ///::-webkit-scrollbar {
         ///    width: 8px;
+        ///    height: 8px;
         ///    padding: 3px;
         ///}
         ///::-webkit-scrollbar-track {
@@ -162,7 +163,7 @@ namespace ReadDown.Properties {
         ///
         ///
         ///body {
-        ///    background-color: #2525 [rest of string was truncated]&quot;;.
+        ///    backg [rest of string was truncated]&quot;;.
         /// </summary>
         public static string style {
             get {

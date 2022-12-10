@@ -12,6 +12,7 @@ html, body {
 
 ::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
     padding: 3px;
 }
 ::-webkit-scrollbar-track {
@@ -48,10 +49,53 @@ body {
     background: transparent;
 }
 
+
+
+a {
+    color: #489be9;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #fff;
+}
+
+p {
+    color: #fff;
+}
+
+ol, ul, dl {
+    color: #fff;
+}
+
+pre {
+    background-color: #66636e7b;
+    padding: 15px;
+    width: fit-content;
+    border-radius: 5px;
+    overflow: auto;
+    white-space: nowrap;
+    width: 80vw;
+}
+
 code {
+    color: #cfcfcf;
+}
+
+p > code {
     background: #66636e7b; 
     box-sizing: border-box;
     padding: .2em .4em;
     font-size: 90%;
     border-radius: 3px;
+}
+
+p > img {
+    max-width: 80vw;
+}
+
+table {
+    border: 1px solid #fff;
+    border-radius: 6px;
+    box-sizing: border-box;
+    padding: 5px;
 }
