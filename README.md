@@ -1,6 +1,6 @@
 # ReadDown
 
-[![.NET Desktop Debug Build](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml)
+[![Debug build](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml)
 
 ReadDown is a fluent and easy to use Markdown reader.
 
@@ -13,6 +13,9 @@ ReadDown has a few features which is easy to use:
 
 Not released yet. Either build it yourself or get debug builds from CI.
 <!--Just get your installer from [releases](https://github.com/Segilmez06/ReadDown/releases) page.-->
+
+## Screenshots
+![Screenshot](screenshots/screenshot.png)
 
 ## Contributing
 
