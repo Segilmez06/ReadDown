@@ -1,5 +1,5 @@
 
-name: .NET Desktop
+name: Debug build
 
 on:
   push:

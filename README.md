@@ -1,6 +1,6 @@
 # ReadDown
 
-[![.NET Desktop Debug Build](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/dotnet-desktop.yml)
+[![.NET Desktop Debug Build](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml)
 
 ReadDown is a fluent and easy to use Markdown reader.
 

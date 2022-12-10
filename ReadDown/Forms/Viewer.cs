@@ -20,6 +20,7 @@ namespace ReadDown
 
         string FileName;
         string Content;
+        string MD;
 
         string FilePath;
 
@@ -39,13 +40,13 @@ namespace ReadDown
                 FilePath = args[1];
             }
 
-            string md = Resources.Welcome;
+            MD = Resources.Welcome;
 
             if (File.Exists(FilePath))
             {
                 FileName = Path.GetFileNameWithoutExtension(FilePath);
 
-                md = File.ReadAllText(FilePath);
+                MD = File.ReadAllText(FilePath);
             }
             else
             {
@@ -55,7 +56,7 @@ namespace ReadDown
             Text = $"{FileName} - ReadDown";
 
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-            string md_html = Markdown.ToHtml(md, pipeline);
+            string md_html = Markdown.ToHtml(MD, pipeline);
 
             string style = Resources.style;
             string frame = Resources.frame;
@@ -98,13 +99,12 @@ namespace ReadDown
             ClearList(ContextMenuList);
 
             var openIcon = new MemoryStream();
-            SvgDocument.FromSvg<SvgDocument>(Resources.open).Draw().Save(openIcon, ImageFormat.Png);
-            //var openIcon = SvgDocument.FromSvg<SvgDocument>(Resources.open);
+            SvgDocument.FromSvg<SvgDocument>(Resources.open).Draw().Invert().Save(openIcon, ImageFormat.Png);
             var OpenItem = CreateNewItem(Renderer, "Open file", openIcon);
             OpenItem.CustomItemSelected += delegate (object sender, object EventArgs)
             {
                 OpenFileDialog openDialog = new();
-                openDialog.Filter = "Markdown document (*.md)|*.md|All files (*.*)|*.*";
+                openDialog.Filter = "Markdown document (*.md;*.markdown)|*.md;*.markdown|All files (*.*)|*.*";
                 openDialog.FileName = "";
                 var result = openDialog.ShowDialog();
                 if (result == DialogResult.OK)
@@ -113,43 +113,72 @@ namespace ReadDown
                 }
             };
             InsertNewItem(ContextMenuList, OpenItem);
-            
-            var saveIcon = new MemoryStream();
-            SvgDocument.FromSvg<SvgDocument>(Resources.save).Draw().Save(saveIcon, ImageFormat.Png);
-            var SaveItem = CreateNewItem(Renderer, "Export to HTML file", saveIcon);
-            SaveItem.CustomItemSelected += delegate(object sender, object EventArgs) {
-                SaveFileDialog saveDialog = new();
-                saveDialog.Filter = "HTML document (*.html)|*.html|All files (*.*)|*.*";
-                saveDialog.FileName = FileName;
-                var result = saveDialog.ShowDialog();
-                if (result == DialogResult.OK)
-                {
-                    File.WriteAllText(saveDialog.FileName, Content);
-                }
-            };
-            InsertNewItem(ContextMenuList, SaveItem);
+
+            #region Old export buttons -- Going to be deleted
+            //var saveIcon = new MemoryStream();
+            //SvgDocument.FromSvg<SvgDocument>(Resources.save).Draw().Save(saveIcon, ImageFormat.Png);
+            //var SaveItem = CreateNewItem(Renderer, "Export to HTML file", saveIcon);
+            //SaveItem.CustomItemSelected += delegate(object sender, object EventArgs) {
+            //    SaveFileDialog saveDialog = new();
+            //    saveDialog.Filter = "HTML document (*.html)|*.html|All files (*.*)|*.*";
+            //    saveDialog.FileName = FileName;
+            //    var result = saveDialog.ShowDialog();
+            //    if (result == DialogResult.OK)
+            //    {
+            //        File.WriteAllText(saveDialog.FileName, Content);
+            //    }
+            //};
+            //InsertNewItem(ContextMenuList, SaveItem);
+
+            //var exportIcon = new MemoryStream();
+            //SvgDocument.FromSvg<SvgDocument>(Resources.document_save).Draw().Save(exportIcon, ImageFormat.Png);
+            //var PDFItem = CreateNewItem(Renderer, "Export to PDF file", exportIcon);
+            //PDFItem.CustomItemSelected += delegate (object sender, object EventArgs) {
+            //    SaveFileDialog saveDialog = new();
+            //    saveDialog.Filter = "PDF document (*.pdf)|*.pdf|All files (*.*)|*.*";
+            //    saveDialog.FileName = FileName;
+            //    var result = saveDialog.ShowDialog();
+            //    if (result == DialogResult.OK)
+            //    {
+            //        Renderer.CoreWebView2.PrintToPdfAsync(saveDialog.FileName);
+            //    }
+            //};
+            //InsertNewItem(ContextMenuList, PDFItem);
+            #endregion
 
             var exportIcon = new MemoryStream();
-            SvgDocument.FromSvg<SvgDocument>(Resources.document_save).Draw().Save(exportIcon, ImageFormat.Png);
-            var PDFItem = CreateNewItem(Renderer, "Export to PDF file", exportIcon);
-            PDFItem.CustomItemSelected += delegate (object sender, object EventArgs) {
+            SvgDocument.FromSvg<SvgDocument>(Resources.document_save).Draw().Invert().Save(exportIcon, ImageFormat.Png);
+            var ExportItem = CreateNewItem(Renderer, "Export", exportIcon);
+            ExportItem.CustomItemSelected += delegate (object sender, object EventArgs) {
                 SaveFileDialog saveDialog = new();
-                saveDialog.Filter = "PDF document (*.pdf)|*.pdf|All files (*.*)|*.*";
+                saveDialog.Filter = "PDF document (*.pdf)|*.pdf|HTML document (*.html)|*.html|All files (*.*)|*.*";
                 saveDialog.FileName = FileName;
                 var result = saveDialog.ShowDialog();
                 if (result == DialogResult.OK)
                 {
-                    Renderer.CoreWebView2.PrintToPdfAsync(saveDialog.FileName);
+                    string extension = Path.GetExtension(saveDialog.FileName);
+                    if (extension == ".pdf")
+                    {
+                        Renderer.CoreWebView2.PrintToPdfAsync(saveDialog.FileName);
+                    }
+                    else if (extension == ".html")
+                    {
+                        File.WriteAllText(saveDialog.FileName, Content);
+                    }
+                    else
+                    {
+                        File.WriteAllText(saveDialog.FileName, MD);
+                    }
                 }
             };
-            InsertNewItem(ContextMenuList, PDFItem);
+            InsertNewItem(ContextMenuList, ExportItem);
 
 #if DEBUG
             var Seperator = CreateNewItem(Renderer, "", null, CoreWebView2ContextMenuItemKind.Separator);
             InsertNewItem(ContextMenuList, Seperator);
 
             var devIcon = new MemoryStream();
-            SvgDocument.FromSvg<SvgDocument>(Resources.window_dev_tools).Draw().Save(devIcon, ImageFormat.Png);
+            SvgDocument.FromSvg<SvgDocument>(Resources.window_dev_tools).Draw().Invert().Save(devIcon, ImageFormat.Png);
             var DevToolsItem = CreateNewItem(Renderer, "Open Developer Tools", devIcon);
             DevToolsItem.CustomItemSelected += delegate (object sender, object EventArgs) {
                 Renderer.CoreWebView2.OpenDevToolsWindow();
@@ -173,5 +202,6 @@ namespace ReadDown
             return Renderer.CoreWebView2.Environment.CreateContextMenuItem(Label, Icon, ItemKind);
         }
 
+        
     }
 }
