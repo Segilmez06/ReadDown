@@ -3,14 +3,14 @@ using Markdig;
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Core;
 
+using Svg;
+
 using ReadDown.Properties;
 using ReadDown.Utils;
 
 using System.IO;
-using System.Drawing;
-using System.Data.SqlTypes;
-using Svg;
 using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace ReadDown
 {
@@ -24,12 +24,23 @@ namespace ReadDown
 
         string FilePath;
 
+        IntPtr HWnd;
+
         public Viewer(string OpenFilePath = "")
         {
             InitializeComponent();
 
-            FormUtils.SetHandleTheme(this.Handle, FormUtils.Theme.Dark);
- 
+            HWnd = Handle;
+            var UISettings = new Windows.UI.ViewManagement.UISettings();
+            ApplyTheme(UISettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background).ToString());
+            UISettings.ColorValuesChanged += (sender, args) =>
+            {
+                string ColorHex = UISettings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background).ToString();
+                ApplyTheme(ColorHex);
+            };
+
+            
+            #region File handling
             var args = Environment.GetCommandLineArgs();
             if (OpenFilePath.Length > 0)
             {
@@ -62,7 +73,7 @@ namespace ReadDown
             string frame = Resources.frame;
 
             Content = frame.Replace("$0", style).Replace("$1", md_html);
-
+            #endregion
 
             InitializeAsync();
         }
@@ -90,8 +101,26 @@ namespace ReadDown
             Controls.Add(Renderer);
 
             Renderer.NavigateToString(Content);
+
+            Renderer.ExecuteScriptAsync("");
         }
 
+        private void ApplyTheme(string HexValue)
+        {
+            HexValue = HexValue.ToLower();
+            if (HexValue == "#ff000000")
+            {
+                FormUtils.SetHandleTheme(HWnd, FormUtils.Theme.Dark);
+                this.BackColor = Color.FromArgb(37, 37, 37);
+            }
+            else if (HexValue == "#ffffffff")
+            {
+                FormUtils.SetHandleTheme(HWnd, FormUtils.Theme.Light);
+                this.BackColor = Color.FromArgb(255, 255, 255);
+            }
+        }
+
+        #region Context Menu
         private void CoreWebView2_ContextMenuRequested(object? sender, CoreWebView2ContextMenuRequestedEventArgs e)
         {
 #pragma warning disable CS8622
@@ -113,38 +142,6 @@ namespace ReadDown
                 }
             };
             InsertNewItem(ContextMenuList, OpenItem);
-
-            #region Old export buttons -- Going to be deleted
-            //var saveIcon = new MemoryStream();
-            //SvgDocument.FromSvg<SvgDocument>(Resources.save).Draw().Save(saveIcon, ImageFormat.Png);
-            //var SaveItem = CreateNewItem(Renderer, "Export to HTML file", saveIcon);
-            //SaveItem.CustomItemSelected += delegate(object sender, object EventArgs) {
-            //    SaveFileDialog saveDialog = new();
-            //    saveDialog.Filter = "HTML document (*.html)|*.html|All files (*.*)|*.*";
-            //    saveDialog.FileName = FileName;
-            //    var result = saveDialog.ShowDialog();
-            //    if (result == DialogResult.OK)
-            //    {
-            //        File.WriteAllText(saveDialog.FileName, Content);
-            //    }
-            //};
-            //InsertNewItem(ContextMenuList, SaveItem);
-
-            //var exportIcon = new MemoryStream();
-            //SvgDocument.FromSvg<SvgDocument>(Resources.document_save).Draw().Save(exportIcon, ImageFormat.Png);
-            //var PDFItem = CreateNewItem(Renderer, "Export to PDF file", exportIcon);
-            //PDFItem.CustomItemSelected += delegate (object sender, object EventArgs) {
-            //    SaveFileDialog saveDialog = new();
-            //    saveDialog.Filter = "PDF document (*.pdf)|*.pdf|All files (*.*)|*.*";
-            //    saveDialog.FileName = FileName;
-            //    var result = saveDialog.ShowDialog();
-            //    if (result == DialogResult.OK)
-            //    {
-            //        Renderer.CoreWebView2.PrintToPdfAsync(saveDialog.FileName);
-            //    }
-            //};
-            //InsertNewItem(ContextMenuList, PDFItem);
-            #endregion
 
             var exportIcon = new MemoryStream();
             SvgDocument.FromSvg<SvgDocument>(Resources.document_save).Draw().Invert().Save(exportIcon, ImageFormat.Png);
@@ -201,7 +198,7 @@ namespace ReadDown
         {
             return Renderer.CoreWebView2.Environment.CreateContextMenuItem(Label, Icon, ItemKind);
         }
+        #endregion
 
-        
     }
 }

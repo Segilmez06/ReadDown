@@ -1,6 +1,33 @@
 
 @charset "UTF-8";
 
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #252525;
+        --text-color: #f0f0f0;
+        --link-color: #489be9;
+        --code-background: #66636e7b;
+        --code-foreground: #cfcfcf;
+        --table-border: #f0f0f0;
+        --scroll-thumb-color: #a0a0a0;
+        --scroll-thumb-color-hover: #ececec;
+        --scroll-thumb-color-active: #6c6c6c;
+    }
+}
+@media (prefers-color-scheme: light) {
+    :root {
+        --background-color: #fff;
+        --text-color: #000;
+        --link-color: #2d2dd5;
+        --code-background: #d3d3d3;
+        --code-foreground: #191919;
+        --table-border: #000000;
+        --scroll-thumb-color: #8b8b8b;
+        --scroll-thumb-color-hover: #575757;
+        --scroll-thumb-color-active: #242424;
+    }
+}
+
 html, body {
     width: 100%;
     height: 100%;
@@ -19,20 +46,22 @@ html, body {
     background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-    background: #a0a0a0;
+    background: var(--scroll-thumb-color);
     border-radius: 5px;
 }
 ::-webkit-scrollbar-thumb:hover {
-    background: #ececec;
+    background: var(--scroll-thumb-color-hover);
 }
 ::-webkit-scrollbar-thumb:active {
-    background: #6c6c6c;
+     background: var(--scroll-thumb-color-active);
 }
 
 
 body {
-    background-color: #252525;
-    color: #f0f0f0;
+    /*    background-color: #252525;
+    color: #f0f0f0;*/
+    background-color: var(--background-color);
+    color: var(--text-color);
     width: 90vw;
     overflow: auto;
     height: 100vh;
@@ -52,37 +81,37 @@ body {
 
 
 a {
-    color: #489be9;
+    color: var(--link-color);
 }
 
 h1, h2, h3, h4, h5, h6 {
-    color: #fff;
+    color: var(--text-color);
 }
 
 p {
-    color: #fff;
+    color: var(--text-color);
 }
 
 ol, ul, dl {
-    color: #fff;
+    color: var(--text-color);
 }
 
 pre {
-    background-color: #66636e7b;
+    background-color: var(--code-background);
     padding: 15px;
     width: fit-content;
     border-radius: 5px;
     overflow: auto;
-    white-space: nowrap;
-    width: 80vw;
+    /*white-space: nowrap;*/
+    width: 85vw;
 }
 
 code {
-    color: #cfcfcf;
+    color: var(--code-foreground);
 }
 
 p > code {
-    background: #66636e7b; 
+    background: var(--code-background); 
     box-sizing: border-box;
     padding: .2em .4em;
     font-size: 90%;
@@ -90,11 +119,11 @@ p > code {
 }
 
 p > img {
-    max-width: 80vw;
+    max-width: 85vw;
 }
 
 table {
-    border: 1px solid #fff;
+    border: 1px solid var(--table-border);
     border-radius: 6px;
     box-sizing: border-box;
     padding: 5px;

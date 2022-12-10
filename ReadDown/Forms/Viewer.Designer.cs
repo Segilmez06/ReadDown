@@ -40,7 +40,7 @@
             this.ForeColor = System.Drawing.Color.White;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
-            this.MinimumSize = new System.Drawing.Size(480, 240);
+            this.MinimumSize = new System.Drawing.Size(750, 240);
             this.Name = "Viewer";
             this.ShowIcon = false;
             this.Text = "ReadDown";

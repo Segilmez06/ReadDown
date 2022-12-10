@@ -133,37 +133,22 @@ namespace ReadDown.Properties {
         ///   Looks up a localized string similar to 
         ///@charset &quot;UTF-8&quot;;
         ///
-        ///html, body {
-        ///    width: 100%;
-        ///    height: 100%;
-        ///    margin: 0;
-        ///    padding: 0;
-        ///    overflow: hidden;
+        ///@media (prefers-color-scheme: dark) {
+        ///    :root {
+        ///        --background-color: #252525;
+        ///        --text-color: #f0f0f0;
+        ///        --link-color: #489be9;
+        ///        --code-background: #66636e7b;
+        ///        --code-foreground: #cfcfcf;
+        ///        --table-border: #f0f0f0;
+        ///        --scroll-thumb-color: #a0a0a0;
+        ///        --scroll-thumb-color-hover: #ececec;
+        ///        --scroll-thumb-color-active: #6c6c6c;
+        ///    }
         ///}
-        ///
-        ///
-        ///::-webkit-scrollbar {
-        ///    width: 8px;
-        ///    height: 8px;
-        ///    padding: 3px;
-        ///}
-        ///::-webkit-scrollbar-track {
-        ///    background: transparent;
-        ///}
-        ///::-webkit-scrollbar-thumb {
-        ///    background: #a0a0a0;
-        ///    border-radius: 5px;
-        ///}
-        ///::-webkit-scrollbar-thumb:hover {
-        ///    background: #ececec;
-        ///}
-        ///::-webkit-scrollbar-thumb:active {
-        ///    background: #6c6c6c;
-        ///}
-        ///
-        ///
-        ///body {
-        ///    backg [rest of string was truncated]&quot;;.
+        ///@media (prefers-color-scheme: light) {
+        ///    :root {
+        ///        --background-color: # [rest of string was truncated]&quot;;.
         /// </summary>
         public static string style {
             get {
