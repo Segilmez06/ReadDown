@@ -11,6 +11,7 @@ using ReadDown.Utils;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ReadDown
 {
@@ -85,24 +86,37 @@ namespace ReadDown
             await Renderer.EnsureCoreWebView2Async(null);
 
             var setttings = Renderer.CoreWebView2.Settings;
-            setttings.IsScriptEnabled = false;
-
+            setttings.IsScriptEnabled = true;
+            setttings.IsStatusBarEnabled = false;
+            setttings.AreBrowserAcceleratorKeysEnabled = true;
 #if DEBUG
             setttings.AreDevToolsEnabled = true;
 #else
             setttings.AreDevToolsEnabled = false;
 #endif
 
-            setttings.IsScriptEnabled = true;
-            setttings.AreBrowserAcceleratorKeysEnabled = true;
-
+            
             Renderer.CoreWebView2.ContextMenuRequested += CoreWebView2_ContextMenuRequested;
-
+            Renderer.SourceChanged += Renderer_SourceChanged;
+            await InitPageAsync();
             Controls.Add(Renderer);
+        }
 
+        private async void Renderer_SourceChanged(object? sender, CoreWebView2SourceChangedEventArgs e)
+        {
+            Regex linkRegex = new(@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)");
+            string blockedPage = "about:blank#blocked";
+            string l = Renderer.Source.ToString();
+            if (l == blockedPage || linkRegex.IsMatch(l))
+            {
+                await InitPageAsync();
+            }
+        }
+
+        private async Task InitPageAsync()
+        {
             Renderer.NavigateToString(Content);
-
-            Renderer.ExecuteScriptAsync("");
+            await Renderer.ExecuteScriptAsync(Resources.redirect);
         }
 
         private void ApplyTheme(string HexValue)

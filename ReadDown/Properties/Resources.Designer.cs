@@ -121,6 +121,21 @@ namespace ReadDown.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to document.querySelectorAll(&apos;a&apos;).forEach(function (item) {
+        ///    let link = item.href;
+        ///    if (link.startsWith(&apos;http&apos;)) {
+        ///        item.href = `javascript:window.open(&apos;${link}&apos;, &apos;_blank&apos;);`;
+        ///    }
+        ///});
+        ///.
+        /// </summary>
+        public static string redirect {
+            get {
+                return ResourceManager.GetString("redirect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;svg width=&quot;24&quot; height=&quot;24&quot; fill=&quot;none&quot; viewBox=&quot;0 0 24 24&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path d=&quot;M3 5.75A2.75 2.75 0 0 1 5.75 3h9.964a3.25 3.25 0 0 1 2.299.952l2.035 2.035c.61.61.952 1.437.952 2.299v9.964A2.75 2.75 0 0 1 18.25 21H5.75A2.75 2.75 0 0 1 3 18.25V5.75ZM5.75 4.5c-.69 0-1.25.56-1.25 1.25v12.5c0 .69.56 1.25 1.25 1.25H6v-5.25A2.25 2.25 0 0 1 8.25 12h7.5A2.25 2.25 0 0 1 18 14.25v5.25h.25c.69 0 1.25-.56 1.25-1.25V8.286c0-.465-.184-.91-.513-1.238l-2.035-2.035a1.75 1.75 0 0 0-.952-.49V7.25a2.25 2 [rest of string was truncated]&quot;;.
         /// </summary>
         public static string save {

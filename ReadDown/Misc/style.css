@@ -110,6 +110,13 @@ code {
     color: var(--code-foreground);
 }
 
+table {
+    border: 1px solid var(--table-border);
+    border-radius: 6px;
+    box-sizing: border-box;
+    padding: 5px;
+}
+
 p > code {
     background: var(--code-background); 
     box-sizing: border-box;
@@ -122,9 +129,6 @@ p > img {
     max-width: 85vw;
 }
 
-table {
-    border: 1px solid var(--table-border);
-    border-radius: 6px;
-    box-sizing: border-box;
-    padding: 5px;
+p > a:not([href]) {
+    color: var(--text-color);
 }
