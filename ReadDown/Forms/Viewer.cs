@@ -10,13 +10,17 @@ using ReadDown.Utils;
 
 using System.IO;
 using System.Drawing.Imaging;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
+using System.Resources;
+using System.ComponentModel;
+using System.Diagnostics;
 
 namespace ReadDown
 {
     public partial class Viewer : Form
     {
+        ComponentResourceManager resources = new(typeof(Viewer));
+        
         WebView2 Renderer = new();
 
         string FileName;
@@ -29,7 +33,11 @@ namespace ReadDown
 
         public Viewer(string OpenFilePath = "")
         {
-            InitializeComponent();
+            ClientSize = new Size(1000, 500);
+            ForeColor = Color.White;
+            Icon = Resources.RD_Icon;
+            MinimumSize = new Size(750, 240);
+            ShowIcon = false;
 
             HWnd = Handle;
             var UISettings = new Windows.UI.ViewManagement.UISettings();
@@ -40,7 +48,6 @@ namespace ReadDown
                 ApplyTheme(ColorHex);
             };
 
-            
             #region File handling
             var args = Environment.GetCommandLineArgs();
             if (OpenFilePath.Length > 0)
@@ -79,44 +86,54 @@ namespace ReadDown
             InitializeAsync();
         }
 
+        #region Initialization
         async void InitializeAsync()
         {
             Renderer.Dock = DockStyle.Fill;
             Renderer.BackColor = Color.FromArgb(37, 37, 37);
             await Renderer.EnsureCoreWebView2Async(null);
 
-            var setttings = Renderer.CoreWebView2.Settings;
-            setttings.IsScriptEnabled = true;
-            setttings.IsStatusBarEnabled = false;
-            setttings.AreBrowserAcceleratorKeysEnabled = true;
+            var settings = Renderer.CoreWebView2.Settings;
+            settings.IsScriptEnabled = false;
+            settings.IsStatusBarEnabled = false;
+            settings.AreBrowserAcceleratorKeysEnabled = true;
 #if DEBUG
-            setttings.AreDevToolsEnabled = true;
+            settings.AreDevToolsEnabled = true;
 #else
-            setttings.AreDevToolsEnabled = false;
+            settings.AreDevToolsEnabled = false;
 #endif
 
-            
             Renderer.CoreWebView2.ContextMenuRequested += CoreWebView2_ContextMenuRequested;
-            Renderer.SourceChanged += Renderer_SourceChanged;
-            await InitPageAsync();
+            Renderer.NavigationStarting += Renderer_NavigationStarting;
+            Renderer.NavigateToString(Content);
             Controls.Add(Renderer);
+            
         }
+        #endregion
 
-        private async void Renderer_SourceChanged(object? sender, CoreWebView2SourceChangedEventArgs e)
+        private void Renderer_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
         {
+            if (e.Uri.Contains("#blocked"))
+            {
+                e.Cancel = true;
+            }
             Regex linkRegex = new(@"[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)");
             string blockedPage = "about:blank#blocked";
-            string l = Renderer.Source.ToString();
-            if (l == blockedPage || linkRegex.IsMatch(l))
+            string l = e.Uri;
+            if (l == blockedPage)
             {
-                await InitPageAsync();
+                Renderer.NavigateToString(Content);
             }
-        }
-
-        private async Task InitPageAsync()
-        {
-            Renderer.NavigateToString(Content);
-            await Renderer.ExecuteScriptAsync(Resources.redirect);
+            else if (linkRegex.IsMatch(l))
+            {
+                e.Cancel = true;
+                Process.Start(new ProcessStartInfo()
+                {
+                    FileName = l,
+                    UseShellExecute = true
+                });
+            }
+            
         }
 
         private void ApplyTheme(string HexValue)
@@ -185,7 +202,7 @@ namespace ReadDown
             InsertNewItem(ContextMenuList, ExportItem);
 
 #if DEBUG
-            var Seperator = CreateNewItem(Renderer, "", null, CoreWebView2ContextMenuItemKind.Separator);
+            var Seperator = CreateNewItem(Renderer, "", new MemoryStream(), CoreWebView2ContextMenuItemKind.Separator);
             InsertNewItem(ContextMenuList, Seperator);
 
             var devIcon = new MemoryStream();
@@ -208,7 +225,7 @@ namespace ReadDown
             ContextMenuList.Insert(ContextMenuList.Count, MenuItem);
         }
 
-        private CoreWebView2ContextMenuItem CreateNewItem(WebView2 Renderer, string Label, Stream Icon = null, CoreWebView2ContextMenuItemKind ItemKind = CoreWebView2ContextMenuItemKind.Command)
+        private CoreWebView2ContextMenuItem CreateNewItem(WebView2 Renderer, string Label, Stream Icon, CoreWebView2ContextMenuItemKind ItemKind = CoreWebView2ContextMenuItemKind.Command)
         {
             return Renderer.CoreWebView2.Environment.CreateContextMenuItem(Label, Icon, ItemKind);
         }

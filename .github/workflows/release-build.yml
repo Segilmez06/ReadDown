@@ -1,0 +1,66 @@
+
+name: Release build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+
+  build-amd64:
+    name: Release build for Windows x64
+    
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    # Build the project
+    - name: Build
+      run: dotnet build ReadDown/ReadDown.csproj -c Release -a x64
+    
+    # Upload output binaries
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release build - Windows Amd64
+        path: ReadDown/bin/Release/
+        
+    
+  build-arm64:
+    name: Release build for Windows Arm64
+    
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+
+    # Install the .NET Core workload
+    - name: Install .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+
+    # Build the project
+    - name: Build
+      run: dotnet build ReadDown/ReadDown.csproj -c Release -a arm64
+      
+    # Upload output binaries
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Release build - Windows Arm64
+        path: ReadDown/bin/Release/
+        
