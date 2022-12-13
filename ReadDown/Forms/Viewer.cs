@@ -27,9 +27,6 @@ namespace ReadDown
 {
     public partial class Viewer : Form
     {
-        [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-        public static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
-
         WebView2 Renderer = new();
 
         string FileName;
@@ -131,47 +128,8 @@ namespace ReadDown
             string Result = args["data"];
             if (Result == "yes")
             {
-                SetAssociation(".md", "Markdown_Document", Application.ExecutablePath, "Markdown Document");
-                MessageBox.Show("Done!");
+                // Associate it
             }
-        }
-
-        public static void SetAssociation(string Extension, string KeyName, string OpenWith, string FileDescription)
-        {
-            Win32.RegistryKey BaseKey;
-            Win32.RegistryKey OpenMethod;
-            Win32.RegistryKey Shell;
-            Win32.RegistryKey CurrentUser;
-
-            BaseKey = Win32.Registry.ClassesRoot.CreateSubKey(Extension);
-            BaseKey.SetValue("", KeyName);
-
-            OpenMethod = Win32.Registry.ClassesRoot.CreateSubKey(KeyName);
-            OpenMethod.SetValue("", FileDescription);
-            OpenMethod.CreateSubKey("DefaultIcon").SetValue("", "\"" + OpenWith + "\",0");
-            Shell = OpenMethod.CreateSubKey("Shell");
-            Shell.CreateSubKey("edit").CreateSubKey("command").SetValue("", "\"" + OpenWith + "\"" + " \"%1\"");
-            Shell.CreateSubKey("open").CreateSubKey("command").SetValue("", "\"" + OpenWith + "\"" + " \"%1\"");
-            BaseKey.Close();
-            OpenMethod.Close();
-            Shell.Close();
-
-            //CurrentUser = Registry.CurrentUser.CreateSubKey(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\" + Extension);
-            //CurrentUser = CurrentUser.OpenSubKey("UserChoice", RegistryKeyPermissionCheck.ReadWriteSubTree, System.Security.AccessControl.RegistryRights.FullControl);
-            //CurrentUser.SetValue("Progid", KeyName, RegistryValueKind.String);
-            //CurrentUser.Close();
-
-            CurrentUser = Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\" + Extension, true);
-            CurrentUser.DeleteSubKey("UserChoice", false);
-            CurrentUser.Close();
-
-            // Delete the key instead of trying to change it
-            //var CurrentUser = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\" + Extension, true);
-            //CurrentUser.DeleteSubKey("UserChoice", false);
-            //CurrentUser.Close();
-
-            // Tell explorer the file association has been changed
-            SHChangeNotify(0x08000000, 0x0000, IntPtr.Zero, IntPtr.Zero);
         }
 
         #endregion
