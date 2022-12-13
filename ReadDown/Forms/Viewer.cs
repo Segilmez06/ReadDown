@@ -2,11 +2,18 @@ using Markdig;
 
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Core;
+using Microsoft.Toolkit.Uwp.Notifications;
+using Win32 = Microsoft.Win32;
 
 using Svg;
 
 using ReadDown.Properties;
 using ReadDown.Utils;
+
+using Windows.ApplicationModel.Activation;
+using Windows.Foundation.Collections;
+using Windows.ApplicationModel.Background;
+using Windows.UI.Notifications;
 
 using System.IO;
 using System.Drawing.Imaging;
@@ -14,18 +21,21 @@ using System.Text.RegularExpressions;
 using System.Resources;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace ReadDown
 {
     public partial class Viewer : Form
     {
-        ComponentResourceManager resources = new(typeof(Viewer));
-        
+        [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
+
         WebView2 Renderer = new();
 
         string FileName;
         string Content;
         string MD;
+        string RawHMTL;
 
         string FilePath;
 
@@ -75,16 +85,96 @@ namespace ReadDown
             Text = $"{FileName} - ReadDown";
 
             var pipeline = new MarkdownPipelineBuilder().UseAdvancedExtensions().Build();
-            string md_html = Markdown.ToHtml(MD, pipeline);
+            RawHMTL = Markdown.ToHtml(MD, pipeline);
 
             string style = Resources.style;
             string frame = Resources.frame;
 
-            Content = frame.Replace("$0", style).Replace("$1", md_html);
+            Content = frame.Replace("$0", style).Replace("$1", RawHMTL);
             #endregion
 
             InitializeAsync();
+
+            //Settings settings = Settings.Default;
+            //if (settings.FirstRun)
+            //{
+            //    settings.FirstRun = false;
+            //    settings.Save();
+            //    ShowToast();
+            //}
         }
+
+        #region Toast notification
+        async void ShowToast()
+        {
+            ToastContentBuilder Notify = new();
+            ToastNotificationManagerCompat.OnActivated += ToastActivated;
+            Notify.AddText("ReadDown");
+            Notify.AddText("Do you want to associate ReadDown with Markdown files?");
+
+            ToastButton YesBtn = new();
+            YesBtn.SetContent("Sure!");
+            YesBtn.AddArgument("data", "yes");
+
+            ToastButton NoBtn = new();
+            NoBtn.SetContent("No thanks.");
+            NoBtn.AddArgument("action", "no");
+
+            Notify.AddButton(YesBtn);
+            Notify.AddButton(NoBtn);
+            Notify.Show();
+        }
+
+        private void ToastActivated(ToastNotificationActivatedEventArgsCompat e)
+        {
+            ToastArguments args = ToastArguments.Parse(e.Argument);
+            string Result = args["data"];
+            if (Result == "yes")
+            {
+                SetAssociation(".md", "Markdown_Document", Application.ExecutablePath, "Markdown Document");
+                MessageBox.Show("Done!");
+            }
+        }
+
+        public static void SetAssociation(string Extension, string KeyName, string OpenWith, string FileDescription)
+        {
+            Win32.RegistryKey BaseKey;
+            Win32.RegistryKey OpenMethod;
+            Win32.RegistryKey Shell;
+            Win32.RegistryKey CurrentUser;
+
+            BaseKey = Win32.Registry.ClassesRoot.CreateSubKey(Extension);
+            BaseKey.SetValue("", KeyName);
+
+            OpenMethod = Win32.Registry.ClassesRoot.CreateSubKey(KeyName);
+            OpenMethod.SetValue("", FileDescription);
+            OpenMethod.CreateSubKey("DefaultIcon").SetValue("", "\"" + OpenWith + "\",0");
+            Shell = OpenMethod.CreateSubKey("Shell");
+            Shell.CreateSubKey("edit").CreateSubKey("command").SetValue("", "\"" + OpenWith + "\"" + " \"%1\"");
+            Shell.CreateSubKey("open").CreateSubKey("command").SetValue("", "\"" + OpenWith + "\"" + " \"%1\"");
+            BaseKey.Close();
+            OpenMethod.Close();
+            Shell.Close();
+
+            //CurrentUser = Registry.CurrentUser.CreateSubKey(@"HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Explorer\FileExts\" + Extension);
+            //CurrentUser = CurrentUser.OpenSubKey("UserChoice", RegistryKeyPermissionCheck.ReadWriteSubTree, System.Security.AccessControl.RegistryRights.FullControl);
+            //CurrentUser.SetValue("Progid", KeyName, RegistryValueKind.String);
+            //CurrentUser.Close();
+
+            CurrentUser = Win32.Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\" + Extension, true);
+            CurrentUser.DeleteSubKey("UserChoice", false);
+            CurrentUser.Close();
+
+            // Delete the key instead of trying to change it
+            //var CurrentUser = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\FileExts\\" + Extension, true);
+            //CurrentUser.DeleteSubKey("UserChoice", false);
+            //CurrentUser.Close();
+
+            // Tell explorer the file association has been changed
+            SHChangeNotify(0x08000000, 0x0000, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        #endregion
 
         #region Initialization
         async void InitializeAsync()
@@ -179,7 +269,7 @@ namespace ReadDown
             var ExportItem = CreateNewItem(Renderer, "Export", exportIcon);
             ExportItem.CustomItemSelected += delegate (object sender, object EventArgs) {
                 SaveFileDialog saveDialog = new();
-                saveDialog.Filter = "PDF document (*.pdf)|*.pdf|HTML document (*.html)|*.html|All files (*.*)|*.*";
+                saveDialog.Filter = "PDF document (*.pdf)|*.pdf|HTML document (*.html)|*.html|Word document (*.docx)|*.docx|Rich Text document (*.rtf)|*.rtf|All files (*.*)|*.*";
                 saveDialog.FileName = FileName;
                 var result = saveDialog.ShowDialog();
                 if (result == DialogResult.OK)
@@ -192,6 +282,14 @@ namespace ReadDown
                     else if (extension == ".html")
                     {
                         File.WriteAllText(saveDialog.FileName, Content);
+                    }
+                    else if (extension == ".docx")
+                    {
+                        File.WriteAllBytes(saveDialog.FileName, DocumentConvert.HtmlToDocx(RawHMTL));
+                    }
+                    else if (extension == ".rtf")
+                    {
+                        File.WriteAllText(saveDialog.FileName, DocumentConvert.HtmlToRtf(RawHMTL));
                     }
                     else
                     {
