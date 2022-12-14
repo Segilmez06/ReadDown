@@ -1,3 +1,5 @@
+using ReadDown.Utils;
+
 namespace ReadDown
 {
     internal static class Program
@@ -10,8 +12,15 @@ namespace ReadDown
         {
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
-            ApplicationConfiguration.Initialize();
-            Application.Run(new Viewer());
+            if (Environment.GetCommandLineArgs().Contains("--set-default"))
+            {
+                ExplorerUtils.SetAssociation(".md", "Zyex.ReadDown.Markdown", Application.ExecutablePath, "Markdown document");
+            }
+            else
+            {
+                ApplicationConfiguration.Initialize();
+                Application.Run(new Viewer());
+            }
         }
     }
 }

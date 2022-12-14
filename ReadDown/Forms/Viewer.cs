@@ -22,6 +22,7 @@ using System.Resources;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.Win32;
 
 namespace ReadDown
 {
@@ -92,13 +93,13 @@ namespace ReadDown
 
             InitializeAsync();
 
-            //Settings settings = Settings.Default;
-            //if (settings.FirstRun)
-            //{
-            //    settings.FirstRun = false;
-            //    settings.Save();
-            //    ShowToast();
-            //}
+            Settings settings = Settings.Default;
+            if (settings.FirstRun)
+            {
+                //settings.FirstRun = false;
+                //settings.Save();
+                ShowToast();
+            }
         }
 
         #region Toast notification
@@ -115,7 +116,7 @@ namespace ReadDown
 
             ToastButton NoBtn = new();
             NoBtn.SetContent("No thanks.");
-            NoBtn.AddArgument("action", "no");
+            NoBtn.AddArgument("data", "no");
 
             Notify.AddButton(YesBtn);
             Notify.AddButton(NoBtn);
@@ -128,7 +129,11 @@ namespace ReadDown
             string Result = args["data"];
             if (Result == "yes")
             {
-                // Associate it
+                Process p = new();
+                p.EnableRaisingEvents = false;
+                p.StartInfo.FileName = "rundll32.exe";
+                p.StartInfo.Arguments = "shell32,OpenAs_RunDLL C:\\Zyex\\PickProgramDialog.md";
+                p.Start();
             }
         }
 
@@ -211,7 +216,7 @@ namespace ReadDown
             var OpenItem = CreateNewItem(Renderer, "Open file", openIcon);
             OpenItem.CustomItemSelected += delegate (object sender, object EventArgs)
             {
-                OpenFileDialog openDialog = new();
+                System.Windows.Forms.OpenFileDialog openDialog = new();
                 openDialog.Filter = "Markdown document (*.md;*.markdown)|*.md;*.markdown|All files (*.*)|*.*";
                 openDialog.FileName = "";
                 var result = openDialog.ShowDialog();
@@ -226,7 +231,7 @@ namespace ReadDown
             SvgDocument.FromSvg<SvgDocument>(Resources.document_save).Draw().Invert().Save(exportIcon, ImageFormat.Png);
             var ExportItem = CreateNewItem(Renderer, "Export", exportIcon);
             ExportItem.CustomItemSelected += delegate (object sender, object EventArgs) {
-                SaveFileDialog saveDialog = new();
+                System.Windows.Forms.SaveFileDialog saveDialog = new();
                 saveDialog.Filter = "PDF document (*.pdf)|*.pdf|HTML document (*.html)|*.html|Word document (*.docx)|*.docx|Rich Text document (*.rtf)|*.rtf|All files (*.*)|*.*";
                 saveDialog.FileName = FileName;
                 var result = saveDialog.ShowDialog();

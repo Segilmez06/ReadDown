@@ -1,6 +1,7 @@
 # ReadDown
 
 [![Debug build](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml/badge.svg)](https://github.com/Segilmez06/ReadDown/actions/workflows/debug-build.yml)
+![Visitor Count](https://visitor-badge.glitch.me/badge?page_id=Zyex.ReadDown&left_color=darkgray&right_color=green&left_text=Visitors)
 
 ReadDown is a fluent and easy to use Markdown reader.
 

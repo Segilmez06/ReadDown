@@ -1,3 +1,2 @@
-- [x] Set assembly info
-- [x] Add icon
-- [x] Add context menu icons
+- [ ] Prompt and set as default for markdown files
+- [ ] Build-in installation on first run

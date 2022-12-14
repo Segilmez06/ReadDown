@@ -182,6 +182,16 @@ namespace ReadDown.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to # Default application is set!
+        ///### You can now start exploring....
+        /// </summary>
+        public static string Success {
+            get {
+                return ResourceManager.GetString("Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to # ReadDown
         ///
         ///ReadDown is an ultra simple Markdown viewer for Windows.
