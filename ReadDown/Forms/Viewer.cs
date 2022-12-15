@@ -3,26 +3,16 @@ using Markdig;
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Core;
 using Microsoft.Toolkit.Uwp.Notifications;
-using Win32 = Microsoft.Win32;
 
 using Svg;
 
 using ReadDown.Properties;
 using ReadDown.Utils;
 
-using Windows.ApplicationModel.Activation;
-using Windows.Foundation.Collections;
-using Windows.ApplicationModel.Background;
-using Windows.UI.Notifications;
-
 using System.IO;
 using System.Drawing.Imaging;
 using System.Text.RegularExpressions;
-using System.Resources;
-using System.ComponentModel;
 using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Microsoft.Win32;
 
 namespace ReadDown
 {
@@ -96,8 +86,8 @@ namespace ReadDown
             Settings settings = Settings.Default;
             if (settings.FirstRun)
             {
-                //settings.FirstRun = false;
-                //settings.Save();
+                settings.FirstRun = false;
+                settings.Save();
                 ShowToast();
             }
         }
