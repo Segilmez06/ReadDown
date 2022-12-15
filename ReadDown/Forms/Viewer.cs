@@ -159,7 +159,7 @@ namespace ReadDown
             OpenItem.CustomItemSelected += delegate (object sender, object EventArgs)
             {
                 System.Windows.Forms.OpenFileDialog openDialog = new();
-                openDialog.Filter = "Markdown document (*.md;*.markdown)|*.md;*.markdown|All files (*.*)|*.*";
+                openDialog.Filter = "Markdown document (*.md)|*.md;*.markdown;*.mkd;*.mkdn;*.mdwn;*.mdown;*.markdn;*.markdown;*.mdtxt;*.mdtext|All files (*.*)|*.*";
                 openDialog.FileName = "";
                 var result = openDialog.ShowDialog();
                 if (result == DialogResult.OK)
@@ -203,6 +203,19 @@ namespace ReadDown
                 }
             };
             InsertNewItem(ContextMenuList, ExportItem);
+
+            var editIcon = new MemoryStream();
+            SvgDocument.FromSvg<SvgDocument>(Resources.open_with).Draw().Invert().Save(editIcon, ImageFormat.Png);
+            var EditItem = CreateNewItem(Renderer, "View with another app", editIcon);
+            EditItem.CustomItemSelected += delegate (object sender, object EventArgs)
+            {
+                Process p = new();
+                p.EnableRaisingEvents = false;
+                p.StartInfo.FileName = "rundll32.exe";
+                p.StartInfo.Arguments = "shell32,OpenAs_RunDLL " + FilePath;
+                p.Start();
+            };
+            InsertNewItem(ContextMenuList, EditItem);
 
 #if DEBUG
             var Seperator = CreateNewItem(Renderer, "", new MemoryStream(), CoreWebView2ContextMenuItemKind.Separator);

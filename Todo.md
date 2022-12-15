@@ -1,3 +1,3 @@
 ### TODO
 
-- [ ] Add `Open with editor` option to context menu
+- [x] Add `Open with` option to context menu
