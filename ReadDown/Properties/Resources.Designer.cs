@@ -92,16 +92,6 @@ namespace ReadDown.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
-        /// </summary>
-        public static System.Drawing.Icon md {
-            get {
-                object obj = ResourceManager.GetObject("md", resourceCulture);
-                return ((System.Drawing.Icon)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &lt;svg width=&quot;24&quot; height=&quot;24&quot; fill=&quot;#fff&quot; viewBox=&quot;0 0 24 24&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot;&gt;&lt;path d=&quot;M6.25 4.5A1.75 1.75 0 0 0 4.5 6.25v11.5c0 .966.783 1.75 1.75 1.75h11.5a1.75 1.75 0 0 0 1.75-1.75v-4a.75.75 0 0 1 1.5 0v4A3.25 3.25 0 0 1 17.75 21H6.25A3.25 3.25 0 0 1 3 17.75V6.25A3.25 3.25 0 0 1 6.25 3h4a.75.75 0 0 1 0 1.5h-4ZM13 3.75a.75.75 0 0 1 .75-.75h6.5a.75.75 0 0 1 .75.75v6.5a.75.75 0 0 1-1.5 0V5.56l-5.22 5.22a.75.75 0 0 1-1.06-1.06l5.22-5.22h-4.69a.75.75 0 0 1-.75-.75Z&quot; fill=&quot;#212121&quot;/&gt;&lt;/svg&gt;.
         /// </summary>
         public static string open {
@@ -178,16 +168,6 @@ namespace ReadDown.Properties {
         public static string style {
             get {
                 return ResourceManager.GetString("style", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to # Default application is set!
-        ///### You can now start exploring....
-        /// </summary>
-        public static string Success {
-            get {
-                return ResourceManager.GetString("Success", resourceCulture);
             }
         }
         

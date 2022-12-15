@@ -1,2 +1,3 @@
-- [ ] Prompt and set as default for markdown files
-- [ ] Build-in installation on first run
+### TODO
+
+- [ ] Add `Open with editor` option to context menu

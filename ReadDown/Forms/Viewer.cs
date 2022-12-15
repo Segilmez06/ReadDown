@@ -2,7 +2,6 @@ using Markdig;
 
 using Microsoft.Web.WebView2.WinForms;
 using Microsoft.Web.WebView2.Core;
-using Microsoft.Toolkit.Uwp.Notifications;
 
 using Svg;
 
@@ -82,54 +81,8 @@ namespace ReadDown
             #endregion
 
             InitializeAsync();
-
-            Settings settings = Settings.Default;
-            if (settings.FirstRun)
-            {
-                settings.FirstRun = false;
-                settings.Save();
-                ShowToast();
-            }
         }
-
-        #region Toast notification
-        async void ShowToast()
-        {
-            ToastContentBuilder Notify = new();
-            ToastNotificationManagerCompat.OnActivated += ToastActivated;
-            Notify.AddText("ReadDown");
-            Notify.AddText("Do you want to associate ReadDown with Markdown files?");
-
-            ToastButton YesBtn = new();
-            YesBtn.SetContent("Sure!");
-            YesBtn.AddArgument("data", "yes");
-
-            ToastButton NoBtn = new();
-            NoBtn.SetContent("No thanks.");
-            NoBtn.AddArgument("data", "no");
-
-            Notify.AddButton(YesBtn);
-            Notify.AddButton(NoBtn);
-            Notify.Show();
-        }
-
-        private void ToastActivated(ToastNotificationActivatedEventArgsCompat e)
-        {
-            ToastArguments args = ToastArguments.Parse(e.Argument);
-            string Result = args["data"];
-            if (Result == "yes")
-            {
-                Process p = new();
-                p.EnableRaisingEvents = false;
-                p.StartInfo.FileName = "rundll32.exe";
-                p.StartInfo.Arguments = "shell32,OpenAs_RunDLL C:\\Zyex\\PickProgramDialog.md";
-                p.Start();
-            }
-        }
-
-        #endregion
-
-        #region Initialization
+        
         async void InitializeAsync()
         {
             Renderer.Dock = DockStyle.Fill;
@@ -152,7 +105,6 @@ namespace ReadDown
             Controls.Add(Renderer);
             
         }
-        #endregion
 
         private void Renderer_NavigationStarting(object? sender, CoreWebView2NavigationStartingEventArgs e)
         {

@@ -124,9 +124,6 @@
   <data name="frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Misc\frame.html;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
-  <data name="md" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\md.ico;System.Drawing.Icon, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="open" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\open.svg;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
@@ -144,9 +141,6 @@
   </data>
   <data name="style" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Misc\style.css;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="Success" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Misc\Success.md;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
   <data name="Welcome" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\misc\welcome.md;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>

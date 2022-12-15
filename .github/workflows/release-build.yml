@@ -25,16 +25,15 @@ jobs:
 
     # Build the project
     - name: Build
-      run: dotnet build ReadDown/ReadDown.csproj -c Release -a x64
+      run: dotnet build Installer/Installer.wapproj -c Release -a x64
     
     # Upload output binaries
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: Release build - Windows Amd64
-        path: ReadDown/bin/Release/
-        
-    
+        name: Windows x64 Release Build
+        path: Installer/bin/
+
   build-arm64:
     name: Release build for Windows Arm64
     
@@ -54,12 +53,11 @@ jobs:
 
     # Build the project
     - name: Build
-      run: dotnet build ReadDown/ReadDown.csproj -c Release -a arm64
-      
+      run: dotnet build Installer/Installer.wapproj -c Release -a arm64
+    
     # Upload output binaries
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
-        name: Release build - Windows Arm64
-        path: ReadDown/bin/Release/
-        
+        name: Windows Arm64 Release Build
+        path: Installer/bin/
