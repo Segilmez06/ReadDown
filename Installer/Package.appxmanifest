@@ -7,12 +7,12 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="ae5a664a-27be-4374-9fd0-a7cb08b28080"
-    Publisher="CN=Segilmez06, O=Segilmez06, C=US"
+    Name="Zyex.ReadDown"
+    Publisher="CN=Segilmez06, O=Zyex, C=TR"
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>Installer</DisplayName>
+    <DisplayName>ReadDown</DisplayName>
     <PublisherDisplayName>Segilmez06</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>

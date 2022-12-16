@@ -10,8 +10,7 @@ Also supports exporting to other formats like `.docx`, `.pdf` and `.html`.
 
 ## Installation
 
-Not released yet. Either build it yourself or get debug builds from CI.
-<!--Just get your installer from [releases](https://github.com/Segilmez06/ReadDown/releases) page.-->
+Get your installer from [releases](https://github.com/Segilmez06/ReadDown/releases/latest) page.
 
 ## Screenshots
 ![Screenshot](screenshots/screenshot.png)
